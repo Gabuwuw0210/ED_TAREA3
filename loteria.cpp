@@ -2,36 +2,44 @@
 #include <fstream>
 #include <string>
 
+const int MAX_PREMIOS = 100;
+
 struct Premio {
     int numero;
     std::string descripcion;
+    bool entregado;
 };
 
-void cargarPremios(const char* archivo, Premio premios[], int n) {
+void cargarPremios(const char* archivo, Premio premios[], int& totalPremios) {
     std::ifstream archivoPremios(archivo);
 
-    if (!archivoPremios) {
-        std::cerr << "Error al abrir el archivo de premios." << std::endl;
-        exit(1);
-    }
+    if (archivoPremios.is_open()) {
+        archivoPremios >> totalPremios;
 
-    for (int i = 0; i < n; ++i) {
-        archivoPremios >> premios[i].numero >> premios[i].descripcion;
-    }
+        for (int i = 0; i < totalPremios; ++i) {
+            archivoPremios >> premios[i].numero >> premios[i].descripcion;
+            premios[i].entregado = false;
+        }
 
-    archivoPremios.close();
+        archivoPremios.close();
+    } else {
+        std::cerr << "No se pudo abrir el archivo de premios." << std::endl;
+    }
 }
 
-void realizarSorteo(Premio premios[], int n, int numeros[], int k) {
+void realizarSorteo(Premio premios[], int totalPremios, int numerosComprados[], int k) {
     for (int i = 0; i < k; ++i) {
         bool premioEncontrado = false;
-        for (int j = 0; j < n; ++j) {
-            if (numeros[i] == premios[j].numero) {
+
+        for (int j = 0; j < totalPremios; ++j) {
+            if (!premios[j].entregado && premios[j].numero == numerosComprados[i]) {
                 std::cout << premios[j].descripcion << std::endl;
+                premios[j].entregado = true;
                 premioEncontrado = true;
                 break;
             }
         }
+
         if (!premioEncontrado) {
             std::cout << "No tiene premio" << std::endl;
         }
@@ -40,30 +48,22 @@ void realizarSorteo(Premio premios[], int n, int numeros[], int k) {
 
 int main() {
     const char* archivoPremios = "premios.txt";
+    const int MAX_PERSONAS = 100;
 
-    std::ifstream archivo(archivoPremios);
-    if (!archivo) {
-        std::cerr << "Error al abrir el archivo de premios." << std::endl;
-        return 1;
-    }
+    Premio premios[MAX_PREMIOS];
+    int totalPremios = 0;
 
-    int n;
-    archivo >> n;
-
-    Premio premios[n];
-    cargarPremios(archivoPremios, premios, n);
+    cargarPremios(archivoPremios, premios, totalPremios);
 
     int k;
     std::cin >> k;
 
-    int numeros[k];
+    int numerosComprados[MAX_PERSONAS];
     for (int i = 0; i < k; ++i) {
-        std::cin >> numeros[i];
+        std::cin >> numerosComprados[i];
     }
 
-    realizarSorteo(premios, n, numeros, k);
-
-    archivo.close();
+    realizarSorteo(premios, totalPremios, numerosComprados, k);
 
     return 0;
 }
