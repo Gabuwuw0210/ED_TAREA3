@@ -1,16 +1,21 @@
-# ED_TAREA3
 Instrucciones de compilación:
 
 Necesario tener:
+- hash.hpp
+- hash.cpp
 - loteria.cpp
-- tictactoe.cpp
 - premios.txt
+- TicTacToe.cpp
+- entrada.txt
 
 Forma de compilacion:
 
-Para probar La Loteria: g++ loteria.cpp -o programa
-   Luego ingresar el número de personas k
-   Luego k enteros separados por un espacio
+1) Loteria (con input de prueba)
+g++ loteria.cpp -o programa
+./programa
+6
+1 123 50 50 20 1
 
-Para probar Tic-Tac-Toe: g++ tictactoe.cpp -o programa
-   Luego ingresar 1, 2 o 3 dependiendo de la instruccion
+2) TicTacToe (con archivo de prueba)
+g++ TicTacToe.cpp -o programa
+./programa
