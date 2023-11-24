@@ -7,55 +7,50 @@ int h(tipoClave k) {
 int hashInsert(ranura HT[], tipoClave k, tipoInfo I) {
     int pos = h(k);
     
-    // Verificar si la clave ya está en la tabla
-    if (HT[pos].ocupado && HT[pos].clave == k) {
-        return 0;  // La clave ya está en la tabla
+    if (HT[pos].entregado && HT[pos].numero == k) {
+        return 0;
     }
 
-    // Buscar la primera ranura libre
-    while (HT[pos].ocupado) {
+    while (HT[pos].entregado) {
         pos = (pos + 1) % tamTabla;
     }
 
-    // Insertar la clave y la información
-    HT[pos].clave = k;
-    HT[pos].informacion = I;
-    HT[pos].ocupado = true;
+    HT[pos].numero = k;
+    HT[pos].descripcion = I.informacion;
+    HT[pos].entregado = true;
 
-    return 1;  // Inserción exitosa
+    return 1;
 }
 
 tipoInfo hashDelete(ranura HT[], tipoClave k) {
     int pos = h(k);
 
-    while (HT[pos].ocupado) {
-        if (HT[pos].clave == k) {
-            // Eliminar la clave y retornar la información asociada
-            HT[pos].ocupado = false;
-            return HT[pos].informacion;
+    while (HT[pos].entregado) {
+        if (HT[pos].numero == k) {
+            tipoInfo retorno;
+            HT[pos].entregado = false;
+            retorno.informacion = HT[pos].descripcion;
+            return retorno;
         }
         pos = (pos + 1) % tamTabla;
     }
 
-    // La clave no se encontró, retorna un valor inválido
     tipoInfo infoInvalida;
-    // Puedes personalizar infoInvalida según tus necesidades
     return infoInvalida;
 }
 
 tipoInfo hashSearch(ranura HT[], tipoClave k) {
     int pos = h(k);
 
-    while (HT[pos].ocupado) {
-        if (HT[pos].clave == k) {
-            // Retornar la información asociada a la clave
-            return HT[pos].informacion;
+    while (HT[pos].entregado) {
+        if (HT[pos].numero == k) {
+            tipoInfo retorno;
+            retorno.informacion = HT[pos].descripcion;
+            return retorno;
         }
         pos = (pos + 1) % tamTabla;
     }
 
-    // La clave no se encontró, retorna un valor inválido
     tipoInfo infoInvalida;
-    // Puedes personalizar infoInvalida según tus necesidades
     return infoInvalida;
 }
